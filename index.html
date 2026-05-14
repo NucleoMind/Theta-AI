@@ -1,0 +1,1213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NucleoMind - AI Research Organization</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "DM Sans", system-ui, sans-serif;
+            font-weight: 400;
+        }
+
+        /* Theme Variables */
+        :root {
+            --theme: dark;
+        }
+
+        body.theme-dark {
+            --bg: #050505;
+            --nav-bg: rgba(0,0,0,0.55);
+            --text: #f5f5f5;
+            --dim: rgba(255,255,255,0.48);
+            --muted: rgba(255,255,255,0.22);
+            --border: rgba(255,255,255,0.07);
+            --border-hover: rgba(125,255,155,0.35);
+            --card: #0c0c0c;
+            --card-hover: #131313;
+            --accent: #7dff9b;
+            --accent-text: black;
+            --label: rgba(125,255,155,0.72);
+            --grid-rgb: 255,255,255;
+            --grid-opacity: 0.022;
+            --btn-sec-bg: #111;
+            --badge-bg: rgba(125,255,155,0.08);
+            --stat-color: #7dff9b;
+            --dot: #7dff9b;
+            --logo-bg: rgba(125,255,155,0.06);
+            --logo-stroke: rgba(125,255,155,0.3);
+            --logo-text: #7dff9b;
+        }
+
+        body.theme-light {
+            --bg: #f0f2ef;
+            --nav-bg: rgba(255,255,255,0.85);
+            --text: #0a0a0a;
+            --dim: rgba(0,0,0,0.54);
+            --muted: rgba(0,0,0,0.32);
+            --border: rgba(0,0,0,0.08);
+            --border-hover: rgba(19,138,60,0.4);
+            --card: #ffffff;
+            --card-hover: #e8ebe6;
+            --accent: #138a3c;
+            --accent-text: white;
+            --label: #138a3c;
+            --grid-rgb: 0,0,0;
+            --grid-opacity: 0.032;
+            --btn-sec-bg: #fff;
+            --badge-bg: rgba(19,138,60,0.07);
+            --stat-color: #138a3c;
+            --dot: #138a3c;
+            --logo-bg: rgba(19,138,60,0.06);
+            --logo-stroke: rgba(19,138,60,0.3);
+            --logo-text: #138a3c;
+        }
+
+        body.theme-aero {
+            --bg: #04091a;
+            --nav-bg: rgba(4,12,35,0.3);
+            --text: #dff0ff;
+            --dim: rgba(190,225,255,0.55);
+            --muted: rgba(130,185,255,0.32);
+            --border: rgba(100,175,255,0.16);
+            --border-hover: rgba(56,207,255,0.45);
+            --card: rgba(255,255,255,0.035);
+            --card-hover: rgba(255,255,255,0.065);
+            --accent: #38cfff;
+            --accent-text: #02101f;
+            --label: rgba(56,207,255,0.75);
+            --grid-rgb: 80,160,255;
+            --grid-opacity: 0.02;
+            --btn-sec-bg: rgba(255,255,255,0.06);
+            --badge-bg: rgba(56,207,255,0.06);
+            --stat-color: #38cfff;
+            --dot: #38cfff;
+            --logo-bg: rgba(56,207,255,0.06);
+            --logo-stroke: rgba(56,207,255,0.3);
+            --logo-text: #38cfff;
+        }
+
+        html {
+            background: var(--bg);
+            color: var(--text);
+            transition: background 0.5s, color 0.5s;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            overflow-x: hidden;
+            transition: background 0.5s, color 0.5s;
+            position: relative;
+        }
+
+        @keyframes auroraFlow {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        @keyframes orbPulse {
+            0%, 100% { opacity: .3; transform: scale(1); }
+            50% { opacity: .55; transform: scale(1.06); }
+        }
+
+        .nm-link {
+            color: var(--dim);
+            text-decoration: none;
+            font-size: 13px;
+            letter-spacing: 0.01em;
+            transition: color 0.2s;
+        }
+
+        .nm-link:hover {
+            color: var(--accent);
+        }
+
+        .nm-card {
+            border: 1px solid var(--border);
+            background: var(--card);
+            transition: border-color 0.3s, background 0.3s, transform 0.3s, box-shadow 0.3s;
+        }
+
+        body.theme-aero .nm-card {
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+        }
+
+        .nm-card:hover {
+            border-color: var(--border-hover);
+            background: var(--card-hover);
+            transform: translateY(-3px);
+        }
+
+        body.theme-aero .nm-card:hover {
+            box-shadow: 0 12px 40px rgba(56,207,255,0.08), inset 0 1px 0 rgba(255,255,255,0.08);
+        }
+
+        body.theme-aero .aero-title {
+            background: linear-gradient(120deg,#dff0ff 0%,#38cfff 35%,#a78bff 65%,#dff0ff 100%);
+            background-size: 300% 300%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: auroraFlow 10s ease infinite;
+        }
+
+        .aero-orb-1 {
+            position: fixed;
+            pointer-events: none;
+            z-index: 0;
+            width: 640px;
+            height: 640px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(0,100,255,.14) 0%, transparent 70%);
+            top: -180px;
+            right: -120px;
+            animation: orbPulse 7s ease-in-out infinite;
+            display: none;
+        }
+
+        body.theme-aero .aero-orb-1 {
+            display: block;
+        }
+
+        .aero-orb-2 {
+            position: fixed;
+            pointer-events: none;
+            z-index: 0;
+            width: 500px;
+            height: 500px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(120,0,255,.1) 0%, transparent 70%);
+            bottom: 80px;
+            left: -160px;
+            animation: orbPulse 9s ease-in-out infinite 2s;
+            display: none;
+        }
+
+        body.theme-aero .aero-orb-2 {
+            display: block;
+        }
+
+        .aero-orb-3 {
+            position: fixed;
+            pointer-events: none;
+            z-index: 0;
+            width: 360px;
+            height: 360px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(0,200,255,.09) 0%, transparent 70%);
+            bottom: 280px;
+            right: 180px;
+            animation: orbPulse 8s ease-in-out infinite 4s;
+            display: none;
+        }
+
+        body.theme-aero .aero-orb-3 {
+            display: block;
+        }
+
+        .aero-btn-primary {
+            background: linear-gradient(135deg,rgba(56,207,255,.88),rgba(110,100,255,.88));
+            border: 1px solid rgba(255,255,255,.28) !important;
+            box-shadow: 0 4px 24px rgba(56,207,255,.22), inset 0 1px 0 rgba(255,255,255,.28);
+            color: white !important;
+            transition: box-shadow .3s, transform .3s !important;
+        }
+
+        .aero-btn-primary:hover {
+            box-shadow: 0 8px 36px rgba(56,207,255,.38), inset 0 1px 0 rgba(255,255,255,.36);
+            transform: translateY(-2px);
+        }
+
+        body.theme-aero .aero-stat {
+            text-shadow: 0 0 40px rgba(56,207,255,.45);
+        }
+
+        body.theme-aero .aero-dot {
+            box-shadow: 0 0 8px rgba(56,207,255,.7);
+        }
+
+        body.theme-aero .aero-pill {
+            border: 1px solid rgba(56,207,255,.25);
+            background: rgba(56,207,255,.06);
+            backdrop-filter: blur(10px);
+        }
+
+        /* Grid Background */
+        .grid-bg {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 0;
+            background-image: 
+                linear-gradient(to right, rgba(var(--grid-rgb),1) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(var(--grid-rgb),1) 1px, transparent 1px);
+            background-size: 88px 88px;
+            opacity: var(--grid-opacity);
+        }
+
+        /* Header */
+        header {
+            position: sticky;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 50;
+            border-bottom: 1px solid var(--border);
+            background: var(--nav-bg);
+            backdrop-filter: blur(22px);
+            -webkit-backdrop-filter: blur(22px);
+            transition: background 0.5s, border-color 0.5s;
+        }
+
+        body.theme-aero header {
+            box-shadow: 0 1px 0 rgba(100,175,255,.15), 0 0 40px rgba(0,80,255,.04);
+        }
+
+        .header-content {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 24px;
+            height: 72px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .brand h1 {
+            font-family: "Syne", sans-serif;
+            font-size: 15px;
+            font-weight: 700;
+            letter-spacing: -0.04em;
+            margin: 0;
+            line-height: 1;
+        }
+
+        body.theme-aero .brand h1 {
+            background: linear-gradient(90deg, #dff0ff, #38cfff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .brand p {
+            font-size: 9.5px;
+            text-transform: uppercase;
+            letter-spacing: 0.36em;
+            color: var(--muted);
+            margin: 4px 0 0;
+        }
+
+        .nav-container {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        nav {
+            display: flex;
+            align-items: center;
+            gap: 28px;
+            margin-right: 20px;
+        }
+
+        .theme-toggle {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            padding: 0 14px;
+            height: 32px;
+            border: 1px solid var(--border);
+            background: var(--btn-sec-bg);
+            color: var(--text);
+            font-size: 11.5px;
+            font-family: inherit;
+            letter-spacing: 0.06em;
+            cursor: pointer;
+            transition: all 0.25s;
+            flex-shrink: 0;
+            text-transform: uppercase;
+        }
+
+        body.theme-aero .theme-toggle {
+            background: rgba(56,207,255,0.07);
+            backdrop-filter: blur(10px);
+        }
+
+        .theme-toggle:hover {
+            border-color: var(--accent);
+        }
+
+        /* Main Content */
+        main {
+            position: relative;
+            z-index: 10;
+        }
+
+        section {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 128px 24px 104px;
+        }
+
+        .hero-label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 40px;
+        }
+
+        .hero-label-line {
+            width: 20px;
+            height: 1px;
+            background: var(--label);
+            opacity: 0.7;
+        }
+
+        .hero-label-text {
+            font-size: 10.5px;
+            text-transform: uppercase;
+            letter-spacing: 0.44em;
+            color: var(--label);
+            margin: 0;
+        }
+
+        .hero-title {
+            font-family: "Syne", sans-serif;
+            font-weight: 800;
+            font-size: clamp(4rem, 10vw, 9.5rem);
+            letter-spacing: -0.07em;
+            line-height: 0.87;
+            max-width: 960px;
+            margin-bottom: 48px;
+        }
+
+        .hero-desc {
+            max-width: 560px;
+            margin-bottom: 52px;
+        }
+
+        .hero-desc p {
+            font-size: 16.5px;
+            line-height: 2;
+            font-weight: 300;
+            color: var(--dim);
+            margin-bottom: 20px;
+        }
+
+        .hero-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .btn {
+            padding: 13px 28px;
+            font-size: 13.5px;
+            font-weight: 500;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            letter-spacing: 0.02em;
+            transition: opacity 0.25s;
+            border: 1px solid var(--border);
+            background: var(--btn-sec-bg);
+            color: var(--text);
+            cursor: pointer;
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: var(--accent-text);
+            border: none;
+        }
+
+        body.theme-aero .btn-primary {
+            background: linear-gradient(135deg,rgba(56,207,255,.88),rgba(110,100,255,.88));
+            border: 1px solid rgba(255,255,255,.28);
+            box-shadow: 0 4px 24px rgba(56,207,255,.22), inset 0 1px 0 rgba(255,255,255,.28);
+            color: white;
+        }
+
+        body.theme-aero .btn-primary:hover {
+            box-shadow: 0 8px 36px rgba(56,207,255,.38), inset 0 1px 0 rgba(255,255,255,.36);
+            transform: translateY(-2px);
+        }
+
+        body.theme-aero .btn {
+            background: rgba(255,255,255,0.05);
+            backdrop-filter: blur(12px);
+        }
+
+        /* Stats Strip */
+        .stats-strip {
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+            background: rgba(255,255,255,0.01);
+        }
+
+        body.theme-light .stats-strip {
+            background: rgba(0,0,0,0.015);
+        }
+
+        body.theme-aero .stats-strip {
+            background: rgba(255,255,255,0.02);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+
+        .stats-grid {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 24px;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+        }
+
+        .stat-item {
+            padding: 40px 28px;
+            border-right: 1px solid var(--border);
+            text-align: center;
+        }
+
+        .stat-item:first-child {
+            text-align: left;
+        }
+
+        .stat-item:last-child {
+            border-right: none;
+            text-align: right;
+        }
+
+        .stat-value {
+            font-family: "Syne", sans-serif;
+            font-size: 2.5rem;
+            font-weight: 800;
+            letter-spacing: -0.05em;
+            color: var(--stat-color);
+        }
+
+        .stat-label {
+            font-size: 10.5px;
+            text-transform: uppercase;
+            letter-spacing: 0.3em;
+            color: var(--muted);
+            margin-top: 8px;
+        }
+
+        /* Section Wrapper */
+        .section-wrapper {
+            padding: 0 24px 88px;
+            border-top: 1px solid var(--border);
+            padding-top: 72px;
+        }
+
+        .section-wrapper.last {
+            padding-bottom: 160px;
+        }
+
+        .section-grid {
+            display: grid;
+            grid-template-columns: 200px 1fr;
+            gap: 48px;
+            align-items: start;
+        }
+
+        .section-label {
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.4em;
+            color: var(--muted);
+            margin: 0;
+            padding-top: 4px;
+        }
+
+        body.theme-aero .section-label {
+            color: rgba(130,185,255,0.38);
+        }
+
+        /* Current Project Section */
+        .project-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 64px;
+        }
+
+        .project-title {
+            font-family: "Syne", sans-serif;
+            font-size: clamp(2.6rem, 5vw, 5.2rem);
+            font-weight: 700;
+            letter-spacing: -0.06em;
+            line-height: 0.9;
+            margin: 0 0 20px;
+        }
+
+        .badges {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 28px;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 13px;
+            border: 1px solid var(--label);
+            font-size: 9.5px;
+            text-transform: uppercase;
+            letter-spacing: 0.32em;
+            color: var(--label);
+            background: var(--badge-bg);
+        }
+
+        body.theme-aero .badge {
+            border: 1px solid rgba(56,207,255,.25);
+            background: rgba(56,207,255,.06);
+            backdrop-filter: blur(10px);
+        }
+
+        .badge.secondary {
+            border: 1px solid var(--border);
+            color: var(--dim);
+            background: transparent;
+        }
+
+        .project-desc p {
+            font-size: 15.5px;
+            line-height: 2;
+            font-weight: 300;
+            color: var(--dim);
+            margin-bottom: 16px;
+        }
+
+        .module-card {
+            padding: 22px 24px;
+            border-left: 2px solid var(--accent);
+            border-top: 1px solid var(--border);
+            border-right: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+            background: var(--card);
+            transition: all 0.3s;
+            margin-bottom: 28px;
+        }
+
+        .module-label {
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.36em;
+            color: var(--label);
+            margin: 0 0 8px;
+        }
+
+        .module-name {
+            font-family: "Syne", sans-serif;
+            font-size: 18px;
+            font-weight: 700;
+            letter-spacing: -0.03em;
+            margin: 0 0 6px;
+            color: var(--text);
+        }
+
+        .module-desc {
+            font-size: 12.5px;
+            color: var(--dim);
+            margin: 0;
+            line-height: 1.7;
+        }
+
+        .feature-list {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 28px;
+        }
+
+        .feature-item {
+            display: flex;
+            gap: 16px;
+            align-items: flex-start;
+        }
+
+        .feature-dot {
+            width: 5px;
+            height: 5px;
+            background: var(--accent);
+            border-radius: 50%;
+            margin-top: 9px;
+            flex-shrink: 0;
+        }
+
+        .feature-title {
+            font-size: 13.5px;
+            font-weight: 500;
+            margin: 0 0 4px;
+        }
+
+        .feature-desc {
+            font-size: 12.5px;
+            color: var(--dim);
+            margin: 0;
+            line-height: 1.7;
+        }
+
+        /* Research Areas */
+        .research-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 14px;
+        }
+
+        .research-card {
+            padding: 28px;
+            text-decoration: none;
+            color: var(--text);
+        }
+
+        .research-icon {
+            margin-bottom: 20px;
+            color: var(--accent);
+            width: 18px;
+            height: 18px;
+        }
+
+        body.theme-aero .research-icon {
+            filter: drop-shadow(0 0 10px rgba(56,207,255,0.33));
+        }
+
+        .research-title {
+            font-family: "Syne", sans-serif;
+            font-size: 13.5px;
+            font-weight: 600;
+            letter-spacing: -0.02em;
+            margin: 0 0 10px;
+        }
+
+        .research-desc {
+            font-size: 12.5px;
+            color: var(--dim);
+            line-height: 1.75;
+            margin: 0;
+        }
+
+        /* Links Grid */
+        .links-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 14px;
+            max-width: 580px;
+        }
+
+        .link-card {
+            padding: 24px;
+            text-decoration: none;
+            color: var(--text);
+        }
+
+        .link-icon {
+            margin-bottom: 18px;
+            color: var(--accent);
+            width: 18px;
+            height: 18px;
+        }
+
+        body.theme-aero .link-icon {
+            filter: drop-shadow(0 0 8px rgba(56,207,255,0.33));
+        }
+
+        .link-name {
+            font-size: 13.5px;
+            font-weight: 500;
+            margin: 0 0 6px;
+        }
+
+        .link-desc {
+            font-size: 12px;
+            color: var(--dim);
+            margin: 0;
+        }
+
+        /* Support Section */
+        .support-content {
+            max-width: 580px;
+        }
+
+        .support-text {
+            font-size: 16.5px;
+            line-height: 2;
+            font-weight: 300;
+            color: var(--dim);
+        }
+
+        .bitcoin-card {
+            padding: 28px;
+            margin-top: 36px;
+            border: 1px solid var(--border);
+            background: var(--card);
+            cursor: default;
+        }
+
+        .bitcoin-label {
+            font-size: 9.5px;
+            text-transform: uppercase;
+            letter-spacing: 0.38em;
+            color: var(--label);
+            margin: 0 0 14px;
+        }
+
+        .bitcoin-address {
+            font-size: 13px;
+            font-family: monospace;
+            word-break: break-all;
+            line-height: 1.9;
+            color: var(--dim);
+            margin: 0;
+            letter-spacing: 0.02em;
+        }
+
+        .email-btn {
+            display: inline-flex;
+            margin-top: 18px;
+            padding: 13px 28px;
+            background: var(--accent);
+            color: var(--accent-text);
+            font-size: 13.5px;
+            font-weight: 500;
+            text-decoration: none;
+            letter-spacing: 0.01em;
+            transition: opacity 0.25s;
+        }
+
+        body.theme-aero .email-btn {
+            background: linear-gradient(135deg,rgba(56,207,255,.88),rgba(110,100,255,.88));
+            border: 1px solid rgba(255,255,255,.28);
+            box-shadow: 0 4px 24px rgba(56,207,255,.22), inset 0 1px 0 rgba(255,255,255,.28);
+            color: white;
+        }
+
+        /* Footer */
+        footer {
+            border-top: 1px solid var(--border);
+        }
+
+        body.theme-aero footer {
+            background: rgba(255,255,255,0.015);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+
+        .footer-content {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 32px 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .footer-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .footer-copyright {
+            font-size: 12px;
+            color: var(--muted);
+            margin: 0;
+        }
+
+        .footer-desc {
+            font-size: 12px;
+            color: var(--muted);
+            margin: 0;
+            letter-spacing: 0.02em;
+        }
+
+        .theme-dots {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .dot-button {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+            background: var(--muted);
+            transform: scale(1);
+            transition: all 0.3s;
+        }
+
+        .dot-button.active {
+            background: var(--dot);
+            transform: scale(1.6);
+        }
+
+        body.theme-aero .dot-button.active {
+            box-shadow: 0 0 8px var(--dot);
+        }
+
+        @media (max-width: 768px) {
+            .project-grid {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+
+            .section-grid {
+                grid-template-columns: 1fr;
+                gap: 32px;
+            }
+
+            .research-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .links-grid {
+                grid-template-columns: 1fr;
+                max-width: 100%;
+            }
+
+            nav {
+                display: none;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .hero {
+                padding: 80px 24px 64px;
+            }
+
+            .hero-title {
+                font-size: clamp(2.5rem, 8vw, 4rem);
+            }
+        }
+    </style>
+</head>
+<body class="theme-dark">
+    <div class="grid-bg"></div>
+    
+    <div class="aero-orb-1"></div>
+    <div class="aero-orb-2"></div>
+    <div class="aero-orb-3"></div>
+
+    <!-- HEADER -->
+    <header>
+        <div class="header-content">
+            <div class="brand">
+                <div>
+                    <h1>NucleoMind</h1>
+                    <p>AI Research Organization</p>
+                </div>
+            </div>
+
+            <div class="nav-container">
+                <nav>
+                    <a href="https://huggingface.co/NucleoMind" target="_blank" class="nm-link">Hugging Face</a>
+                    <a href="https://github.com/NucleoMind" target="_blank" class="nm-link">GitHub</a>
+                    <a href="https://x.com/NucleoMind" target="_blank" class="nm-link">X</a>
+                </nav>
+
+                <button class="theme-toggle" onclick="cycleTheme()">
+                    <span id="theme-icon">☀️</span>
+                    <span id="theme-label">Light</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN -->
+    <main>
+        <!-- HERO -->
+        <section class="hero">
+            <div class="hero-label">
+                <div class="hero-label-line"></div>
+                <p class="hero-label-text">Independent Research · Est. 2026</p>
+            </div>
+
+            <h2 class="hero-title">Nucleo<br>Mind</h2>
+
+            <div class="hero-desc">
+                <p>NucleoMind is an independent artificial intelligence research organization exploring experimental AI systems, future digital technologies, and intelligent computing concepts.</p>
+                <p>Inspired by organizations such as Google DeepMind, NucleoMind focuses on open experimentation, independent learning, and public AI development.</p>
+            </div>
+
+            <div class="hero-buttons">
+                <a href="https://github.com/NucleoMind" target="_blank" class="btn btn-primary">View GitHub →</a>
+                <a href="https://huggingface.co/NucleoMind" target="_blank" class="btn">Hugging Face</a>
+            </div>
+        </section>
+
+        <!-- STATS STRIP -->
+        <div class="stats-strip">
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="stat-value">2026</div>
+                    <div class="stat-label">Year Active</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">1</div>
+                    <div class="stat-label">Active Modules</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">100%</div>
+                    <div class="stat-label">Open Source</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">∞</div>
+                    <div class="stat-label">Research Scope</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- CURRENT PROJECT -->
+        <section>
+            <div class="section-wrapper">
+                <div class="section-grid">
+                    <p class="section-label">Current Project</p>
+                    <div>
+                        <div class="project-grid">
+                            <div>
+                                <h3 class="project-title">Luminex</h3>
+
+                                <div class="badges">
+                                    <span class="badge">In Development</span>
+                                    <span class="badge secondary">E1B Module Active</span>
+                                </div>
+
+                                <div class="project-desc">
+                                    <p>An experimental artificial intelligence project currently under development within NucleoMind, focused on intelligent interaction systems and future AI experiences.</p>
+                                    <p>The <span style="color: var(--text); font-weight: 400;">Luminex-E1B Module</span> is the first active component of the Luminex architecture — an experimental subsystem designed to explore modular reasoning, adaptive inference, and context-aware intelligence in a controlled research setting.</p>
+                                </div>
+                            </div>
+
+                            <div class="feature-list">
+                                <div class="nm-card module-card">
+                                    <p class="module-label">Active Module</p>
+                                    <p class="module-name">Luminex-E1B</p>
+                                    <p class="module-desc">Modular reasoning · Adaptive inference · Context-aware intelligence</p>
+                                </div>
+
+                                <div class="feature-item">
+                                    <div class="feature-dot"></div>
+                                    <div>
+                                        <p class="feature-title">Intelligent Interaction</p>
+                                        <p class="feature-desc">Natural, context-aware AI experiences built for real-world utility.</p>
+                                    </div>
+                                </div>
+
+                                <div class="feature-item">
+                                    <div class="feature-dot"></div>
+                                    <div>
+                                        <p class="feature-title">Experimental Architecture</p>
+                                        <p class="feature-desc">Novel modular approaches beyond conventional AI system design.</p>
+                                    </div>
+                                </div>
+
+                                <div class="feature-item">
+                                    <div class="feature-dot"></div>
+                                    <div>
+                                        <p class="feature-title">Open Development</p>
+                                        <p class="feature-desc">Built transparently and shared with the research community.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- RESEARCH AREAS -->
+        <section>
+            <div class="section-wrapper">
+                <div class="section-grid">
+                    <p class="section-label">Research Areas</p>
+                    <div>
+                        <div class="research-grid">
+                            <div class="nm-card research-card">
+                                <svg class="research-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                                </svg>
+                                <h4 class="research-title">Language Models</h4>
+                                <p class="research-desc">Large-scale architecture and training methodology research.</p>
+                            </div>
+
+                            <div class="nm-card research-card">
+                                <svg class="research-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                    <circle cx="12" cy="12" r="3"/>
+                                    <path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/>
+                                </svg>
+                                <h4 class="research-title">AI Systems</h4>
+                                <p class="research-desc">Systems that reason, adapt, and interact naturally.</p>
+                            </div>
+
+                            <div class="nm-card research-card">
+                                <svg class="research-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10,9 9,9 8,9"/>
+                                </svg>
+                                <h4 class="research-title">Open Research</h4>
+                                <p class="research-desc">Publishing findings openly for the global AI community.</p>
+                            </div>
+
+                            <div class="nm-card research-card">
+                                <svg class="research-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                    <polygon points="13,2 3,14 12,14 11,22 21,10 12,10 13,2"/>
+                                </svg>
+                                <h4 class="research-title">Future Tech</h4>
+                                <p class="research-desc">Next-generation computing paradigms and digital intelligence.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ORGANIZATION LINKS -->
+        <section>
+            <div class="section-wrapper">
+                <div class="section-grid">
+                    <p class="section-label">Organization Links</p>
+                    <div>
+                        <div class="links-grid">
+                            <a href="https://huggingface.co/NucleoMind" target="_blank" class="nm-card link-card">
+                                <svg class="link-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                    <circle cx="12" cy="8" r="5"/><path d="M9 8h.01M15 8h.01"/><path d="M10 11s0 2 2 2 2-2 2-2"/><path d="M4.5 16.5C3 19 3 21 3 21h18s0-2-1.5-4.5"/>
+                                </svg>
+                                <h4 class="link-name">Hugging Face</h4>
+                                <p class="link-desc">Models & Datasets</p>
+                            </a>
+
+                            <a href="https://github.com/NucleoMind" target="_blank" class="nm-card link-card">
+                                <svg class="link-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/>
+                                </svg>
+                                <h4 class="link-name">GitHub</h4>
+                                <p class="link-desc">Open Source Code</p>
+                            </a>
+
+                            <a href="https://x.com/NucleoMind" target="_blank" class="nm-card link-card">
+                                <svg class="link-icon" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                                </svg>
+                                <h4 class="link-name">X / Twitter</h4>
+                                <p class="link-desc">Updates & News</p>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SUPPORT -->
+        <section>
+            <div class="section-wrapper">
+                <div class="section-grid">
+                    <p class="section-label">Support</p>
+                    <div class="support-content">
+                        <p class="support-text">Contributions help support independent AI research, experimental development, and future organization projects — including the Luminex platform and E1B Module.</p>
+
+                        <div class="bitcoin-card">
+                            <p class="bitcoin-label">Bitcoin Address</p>
+                            <p class="bitcoin-address">bc1qqjc5t9j3s6fj94ff3svqm3kzemct0rghg5m4mr</p>
+                        </div>
+
+                        <a href="mailto:AChiguru@atomicmail.io" class="email-btn">AChiguru@atomicmail.io</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-top">
+                <div style="display: flex; align-items: center; gap: 12px;">
+                    <p class="footer-copyright">© 2026 NucleoMind</p>
+                </div>
+                <p class="footer-desc">Independent Artificial Intelligence Research Organization</p>
+            </div>
+
+            <div class="theme-dots">
+                <button class="dot-button active" onclick="setTheme('dark')" title="Dark"></button>
+                <button class="dot-button" onclick="setTheme('light')" title="Light"></button>
+                <button class="dot-button" onclick="setTheme('aero')" title="Aero"></button>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const CYCLE = { dark: 'light', light: 'aero', aero: 'dark' };
+        const NEXT_LABEL = { dark: 'Light', light: 'Aero', aero: 'Dark' };
+        const NEXT_ICON = { dark: '☀️', light: '⚡', aero: '🌙' };
+
+        let currentTheme = localStorage.getItem('nucleomind-theme') || 'dark';
+
+        function applyTheme(theme) {
+            document.body.className = `theme-${theme}`;
+            document.getElementById('theme-label').textContent = NEXT_LABEL[theme];
+            document.getElementById('theme-icon').textContent = NEXT_ICON[theme];
+            
+            const dots = document.querySelectorAll('.dot-button');
+            dots.forEach((dot, i) => {
+                const themes = ['dark', 'light', 'aero'];
+                dot.classList.toggle('active', themes[i] === theme);
+            });
+            
+            localStorage.setItem('nucleomind-theme', theme);
+        }
+
+        function cycleTheme() {
+            currentTheme = CYCLE[currentTheme];
+            applyTheme(currentTheme);
+        }
+
+        function setTheme(theme) {
+            currentTheme = theme;
+            applyTheme(currentTheme);
+        }
+
+        // Initialize theme on load
+        document.addEventListener('DOMContentLoaded', () => {
+            applyTheme(currentTheme);
+        });
+
+        // Load fonts
+        if (!document.getElementById('nm-fonts')) {
+            const link = document.createElement('link');
+            link.id = 'nm-fonts';
+            link.rel = 'stylesheet';
+            link.href = 'https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap';
+            document.head.appendChild(link);
+        }
+    </script>
+</body>
+</html>
